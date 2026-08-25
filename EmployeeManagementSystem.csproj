@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Screenshots\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
