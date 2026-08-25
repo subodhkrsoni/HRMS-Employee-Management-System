@@ -1,0 +1,221 @@
+﻿@model EmployeeManagementSystem.ViewModels.UserViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2>
+                <i class="bi bi-person-gear"></i>
+                Edit User
+            </h2>
+
+            <p class="text-muted mb-0">
+                Update user account and permissions
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back
+
+        </a>
+
+    </div>
+
+
+    <!-- Edit Card -->
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <i class="bi bi-pencil-square"></i>
+            User Information
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form asp-action="Edit"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       asp-for="UserId" />
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Full Name -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="FullName"
+                               class="form-label fw-bold">
+                            Full Name
+                        </label>
+
+                        <input asp-for="FullName"
+                               class="form-control"
+                               placeholder="Enter full name" />
+
+                        <span asp-validation-for="FullName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Username -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Username"
+                               class="form-label fw-bold">
+                            Username
+                        </label>
+
+                        <input asp-for="Username"
+                               class="form-control"
+                               placeholder="Enter username" />
+
+                        <span asp-validation-for="Username"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- New Password -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Password"
+                               class="form-label fw-bold">
+
+                            New Password
+
+                        </label>
+
+                        <input asp-for="Password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Leave blank to keep current password" />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger">
+                        </span>
+
+                        <small class="text-muted">
+                            Leave blank if you don't want to change the password.
+                        </small>
+
+                    </div>
+
+
+                    <!-- Role -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Role"
+                               class="form-label fw-bold">
+
+                            Role
+
+                        </label>
+
+                        <select asp-for="Role"
+                                class="form-select">
+
+                            <option value="Employee">
+                                Employee
+                            </option>
+
+                            <option value="HR">
+                                HR
+                            </option>
+
+                            <option value="Admin">
+                                Admin
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Role"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Status -->
+                    <div class="col-md-12 mb-3">
+
+                        <div class="form-check">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label fw-bold">
+
+                                Active User
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <hr />
+
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancel
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-save"></i>
+                        Update User
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

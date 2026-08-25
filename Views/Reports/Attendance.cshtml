@@ -1,0 +1,930 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.Attendance>
+
+@{
+    Layout = "_AdminLayout";
+
+    ViewData["Title"] = "Attendance Report";
+
+    var attendance = Model?.ToList()
+        ?? new List<EmployeeManagementSystem.Models.Attendance>();
+
+
+    // ==========================================
+    // SUMMARY COUNTS
+    // ==========================================
+
+    var totalRecords = attendance.Count;
+
+    var presentCount = attendance.Count(a =>
+        a.Status == "Present");
+
+    var absentCount = attendance.Count(a =>
+        a.Status == "Absent");
+
+    var lateCount = attendance.Count(a =>
+        a.Status == "Late");
+
+    var halfDayCount = attendance.Count(a =>
+        a.Status == "Half Day");
+
+
+    // ==========================================
+    // ATTENDANCE VALUE
+    //
+    // Present  = 1
+    // Late     = 1
+    // Half Day = 0.5
+    // Absent   = 0
+    // ==========================================
+
+    var attendanceValue =
+        presentCount
+        + lateCount
+        + (halfDayCount * 0.5);
+
+
+    // ==========================================
+    // ATTENDANCE PERCENTAGE
+    // ==========================================
+
+    var attendancePercentage = totalRecords > 0
+        ? Math.Round(
+            (attendanceValue / totalRecords) * 100,
+            2)
+        : 0;
+}
+
+
+<div class="container-fluid attendance-report">
+
+    <!-- ==========================================
+         HEADER
+         ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-calendar-check me-2"></i>
+
+                Attendance Report
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Employee attendance report.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <!-- PRINT -->
+
+            <button type="button"
+                    onclick="window.print()"
+                    class="btn btn-dark me-2">
+
+                <i class="bi bi-printer me-2"></i>
+
+                Print Report
+
+            </button>
+
+
+            <!-- BACK -->
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-2"></i>
+
+                Back to Reports
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         FILTER
+         ========================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form asp-action="Attendance"
+                  method="get"
+                  class="row g-3 align-items-end">
+
+
+                <!-- ==========================================
+                     EMPLOYEE
+                     ========================================== -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <label class="form-label fw-bold">
+                        Employee
+                    </label>
+
+                    <select name="employeeId"
+                            class="form-select">
+
+                        @if (ViewBag.SelectedEmployee == null)
+                        {
+                            <option value="" selected>
+                                All Employees
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="">
+                                All Employees
+                            </option>
+                        }
+
+
+                        @foreach (var employee in ViewBag.Employees)
+                        {
+                            if (ViewBag.SelectedEmployee == employee.EmployeeId)
+                            {
+                                <option value="@employee.EmployeeId"
+                                        selected>
+
+                                    @employee.Name
+
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@employee.EmployeeId">
+
+                                    @employee.Name
+
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- ==========================================
+                     MONTH
+                     ========================================== -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <label class="form-label fw-bold">
+                        Month
+                    </label>
+
+                    <select name="month"
+                            class="form-select">
+
+                        @if (ViewBag.SelectedMonth == null)
+                        {
+                            <option value="" selected>
+                                All Months
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="">
+                                All Months
+                            </option>
+                        }
+
+
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            if (ViewBag.SelectedMonth == i)
+                            {
+                                <option value="@i" selected>
+
+                                    @(
+                                        new DateTime(2000, i, 1)
+                                            .ToString("MMMM")
+                                    )
+
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@i">
+
+                                    @(
+                                        new DateTime(2000, i, 1)
+                                            .ToString("MMMM")
+                                    )
+
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- ==========================================
+                     YEAR
+                     ========================================== -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <label class="form-label fw-bold">
+                        Year
+                    </label>
+
+                    <select name="year"
+                            class="form-select">
+
+                        @if (ViewBag.SelectedYear == null)
+                        {
+                            <option value="" selected>
+                                All Years
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="">
+                                All Years
+                            </option>
+                        }
+
+
+                        @for (
+                            int y = DateTime.Today.Year - 2;
+                            y <= DateTime.Today.Year;
+                            y++)
+                        {
+                            if (ViewBag.SelectedYear == y)
+                            {
+                                <option value="@y" selected>
+                                    @y
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@y">
+                                    @y
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- ==========================================
+                     STATUS
+                     ========================================== -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <label class="form-label fw-bold">
+                        Status
+                    </label>
+
+                    <select name="status"
+                            class="form-select">
+
+                        @if (string.IsNullOrWhiteSpace(
+                            ViewBag.SelectedStatus as string))
+                        {
+                            <option value="" selected>
+                                All Status
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="">
+                                All Status
+                            </option>
+                        }
+
+
+                        @if (ViewBag.SelectedStatus == "Present")
+                        {
+                            <option value="Present" selected>
+                                Present
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Present">
+                                Present
+                            </option>
+                        }
+
+
+                        @if (ViewBag.SelectedStatus == "Absent")
+                        {
+                            <option value="Absent" selected>
+                                Absent
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Absent">
+                                Absent
+                            </option>
+                        }
+
+
+                        @if (ViewBag.SelectedStatus == "Late")
+                        {
+                            <option value="Late" selected>
+                                Late
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Late">
+                                Late
+                            </option>
+                        }
+
+
+                        @if (ViewBag.SelectedStatus == "Half Day")
+                        {
+                            <option value="Half Day" selected>
+                                Half Day
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Half Day">
+                                Half Day
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- ==========================================
+                     BUTTONS
+                     ========================================== -->
+
+                <div class="col-12">
+
+                    <button type="submit"
+                            class="btn btn-primary me-2">
+
+                        <i class="bi bi-funnel me-1"></i>
+
+                        Apply Filter
+
+                    </button>
+
+
+                    <a asp-action="Attendance"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SUMMARY CARDS
+         ========================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- TOTAL -->
+
+        <div class="col-xl col-lg-4 col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Total Records
+                    </h6>
+
+                    <h3 class="fw-bold text-primary mb-0">
+                        @totalRecords
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRESENT -->
+
+        <div class="col-xl col-lg-4 col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Present
+                    </h6>
+
+                    <h3 class="fw-bold text-success mb-0">
+                        @presentCount
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ABSENT -->
+
+        <div class="col-xl col-lg-4 col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Absent
+                    </h6>
+
+                    <h3 class="fw-bold text-danger mb-0">
+                        @absentCount
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LATE -->
+
+        <div class="col-xl col-lg-4 col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Late
+                    </h6>
+
+                    <h3 class="fw-bold text-warning mb-0">
+                        @lateCount
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HALF DAY -->
+
+        <div class="col-xl col-lg-4 col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Half Day
+                    </h6>
+
+                    <h3 class="fw-bold text-info mb-0">
+                        @halfDayCount
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ATTENDANCE PERCENTAGE -->
+
+        <div class="col-xl col-lg-4 col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Attendance %
+                    </h6>
+
+                    <h3 class="fw-bold text-info mb-0">
+
+                        @attendancePercentage.ToString("0.00")%
+
+                    </h3>
+
+                    <small class="text-muted">
+
+                        Present + Late + Half Day 0.5
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         ATTENDANCE TABLE
+         ========================================== -->
+
+    <div class="card shadow-sm">
+
+
+        <!-- TABLE HEADER -->
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-table me-2"></i>
+
+                Attendance Records
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table id="attendanceTable"
+                       class="table table-striped table-hover table-bordered align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Employee</th>
+
+                            <th>Date</th>
+
+                            <th>Status</th>
+
+                            <th>Check In</th>
+
+                            <th>Check Out</th>
+
+                            <th>Remarks</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @{
+                            int count = 1;
+                        }
+
+
+                        @foreach (var item in attendance)
+                        {
+
+                            <tr>
+
+                                <!-- NUMBER -->
+
+                                <td>
+                                    @count
+                                </td>
+
+
+                                <!-- EMPLOYEE -->
+
+                                <td>
+
+                                    <strong>
+                                        @(item.Employee?.Name ?? "N/A")
+                                    </strong>
+
+                                    <br />
+
+                                    <small class="text-muted">
+                                        @(item.Employee?.EmployeeCode ?? "N/A")
+                                    </small>
+
+                                </td>
+
+
+                                <!-- DATE -->
+
+                                <td>
+                                    @item.AttendanceDate.ToString("dd-MM-yyyy")
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (item.Status == "Present")
+                                    {
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Present
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Absent")
+                                    {
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            Absent
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Late")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-clock me-1"></i>
+
+                                            Late
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Half Day")
+                                    {
+                                        <span class="badge bg-info text-dark">
+
+                                            <i class="bi bi-hourglass-split me-1"></i>
+
+                                            Half Day
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+
+                                            @(item.Status ?? "Unknown")
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- CHECK IN -->
+
+                                <td>
+
+                                    @if (item.CheckIn.HasValue)
+                                    {
+                                        <span>
+                                            @item.CheckIn.Value.ToString(@"hh\:mm")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- CHECK OUT -->
+
+                                <td>
+
+                                    @if (item.CheckOut.HasValue)
+                                    {
+                                        <span>
+                                            @item.CheckOut.Value.ToString(@"hh\:mm")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- REMARKS -->
+
+                                <td>
+
+                                    @if (string.IsNullOrWhiteSpace(item.Remarks))
+                                    {
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Remarks
+                                    }
+
+                                </td>
+
+                            </tr>
+
+                            count++;
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     CUSTOM CSS
+     ========================================== -->
+
+<style>
+
+    .attendance-report {
+        width: 100%;
+    }
+
+
+    .attendance-report .card {
+        border-radius: 10px;
+    }
+
+
+    .attendance-report .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+
+
+    .attendance-report table {
+        width: 100% !important;
+    }
+
+
+    .attendance-report th,
+    .attendance-report td {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+
+    .attendance-report .badge {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.7rem;
+    }
+
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+
+    @@media (max-width: 768px) {
+
+        .attendance-report .d-flex {
+            display: block !important;
+        }
+
+        .attendance-report .d-flex > div:last-child {
+            margin-top: 1rem;
+        }
+
+        .attendance-report .card-body {
+            overflow-x: auto;
+        }
+
+    }
+
+
+    /* ==========================================
+       PRINT
+       ========================================== */
+
+    @@media print {
+
+        aside,
+        .navbar,
+        .btn,
+        .dataTables_filter,
+        .dataTables_length,
+        .dataTables_paginate,
+        .dataTables_info {
+            display: none !important;
+        }
+
+
+        body {
+            background: white !important;
+        }
+
+
+        .attendance-report {
+            width: 100% !important;
+        }
+
+
+        .attendance-report .card {
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+
+        .attendance-report .card-header {
+            background: white !important;
+            color: black !important;
+        }
+
+
+        .attendance-report .card {
+            page-break-inside: avoid;
+        }
+
+    }
+
+</style>
+
+
+<!-- ==========================================
+     DATATABLE
+     ========================================== -->
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#attendanceTable').DataTable({
+
+                responsive: false,
+
+                scrollX: true,
+
+                pageLength: 10,
+
+                lengthMenu: [10, 25, 50, 100],
+
+                ordering: true,
+
+                order: [[2, 'desc']]
+
+            });
+
+        });
+
+    </script>
+}

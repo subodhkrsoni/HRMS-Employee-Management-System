@@ -1,0 +1,196 @@
+﻿@model EmployeeManagementSystem.ViewModels.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-warning text-dark">
+            <h3>
+                <i class="bi bi-pencil-square"></i>
+                Edit Employee
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit"
+                  enctype="multipart/form-data">
+
+                <input asp-for="Employee.EmployeeId" type="hidden" />
+                <input asp-for="Employee.PhotoPath" type="hidden" />
+
+                <div class="row">
+
+                    <div class="col-md-3 text-center mb-3">
+
+                        @if (!string.IsNullOrEmpty(Model.Employee.PhotoPath))
+                        {
+                            <img src="@Model.Employee.PhotoPath"
+                                 class="img-thumbnail rounded-circle"
+                                 style="width:180px;height:180px;object-fit:cover;" />
+                        }
+                        else
+                        {
+                            <img src="~/images/default-user.png"
+                                 class="img-thumbnail rounded-circle"
+                                 style="width:180px;height:180px;object-fit:cover;" />
+                        }
+
+                        <br /><br />
+
+                        <input asp-for="Photo"
+                               type="file"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Employee Code</label>
+
+                                <input asp-for="Employee.EmployeeCode"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Name</label>
+
+                                <input asp-for="Employee.Name"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Email</label>
+
+                                <input asp-for="Employee.Email"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Phone</label>
+
+                                <input asp-for="Employee.Phone"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Gender</label>
+
+                                <select asp-for="Employee.Gender"
+                                        class="form-select">
+
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Designation</label>
+
+                                <input asp-for="Employee.Designation"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Department</label>
+
+                                <select asp-for="Employee.DepartmentId"
+                                        asp-items="Model.Departments"
+                                        class="form-select"></select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Salary</label>
+
+                                <input asp-for="Employee.Salary"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Joining Date</label>
+
+                                <input asp-for="Employee.JoiningDate"
+                                       type="date"
+                                       class="form-control" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label>Status</label>
+
+                                <select asp-for="Employee.IsActive"
+                                        class="form-select">
+
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+
+                                <label>Address</label>
+
+                                <textarea asp-for="Employee.Address"
+                                          rows="3"
+                                          class="form-control"></textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-success">
+                    Update Employee
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

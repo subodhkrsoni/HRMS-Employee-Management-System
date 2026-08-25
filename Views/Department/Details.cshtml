@@ -1,0 +1,66 @@
+﻿@model EmployeeManagementSystem.Models.Department
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-info text-white">
+
+            <h3>Department Details</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="col-sm-3">
+
+                    Department
+
+                </dt>
+
+                <dd class="col-sm-9">
+
+                    @Model.DepartmentName
+
+                </dd>
+
+                <dt class="col-sm-3">
+
+                    Location
+
+                </dt>
+
+                <dd class="col-sm-9">
+
+                    @Model.Location
+
+                </dd>
+
+            </dl>
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.DepartmentId"
+               class="btn btn-warning">
+
+                Edit
+
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

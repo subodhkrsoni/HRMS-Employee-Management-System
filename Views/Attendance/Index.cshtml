@@ -1,0 +1,519 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.Attendance>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Attendance";
+}
+
+<div class="container-fluid">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-calendar-check me-2"></i>
+
+                Attendance
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Manage employee attendance and working hours.
+
+            </p>
+
+        </div>
+
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle me-2"></i>
+
+            Mark Attendance
+
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Total Records
+                            </h6>
+
+                            <h3 class="fw-bold">
+                                @Model.Count()
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-calendar3 fs-1 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Present
+                            </h6>
+
+                            <h3 class="fw-bold text-success">
+
+                                @Model.Count(x => x.Status == "Present")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-check-circle fs-1 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Absent
+                            </h6>
+
+                            <h3 class="fw-bold text-danger">
+
+                                @Model.Count(x => x.Status == "Absent")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-x-circle fs-1 text-danger"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Late / Half Day
+                            </h6>
+
+                            <h3 class="fw-bold text-warning">
+
+                                @Model.Count(x =>
+                                    x.Status == "Late" ||
+                                    x.Status == "Half Day")
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-clock-history fs-1 text-warning"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE TABLE -->
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <i class="bi bi-list-check me-2"></i>
+
+            Attendance Records
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table id="attendanceTable"
+                       class="table table-striped table-hover table-bordered nowrap"
+                       style="width:100%">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Employee</th>
+
+                            <th>Code</th>
+
+                            <th>Date</th>
+
+                            <th>Status</th>
+
+                            <th>Check In</th>
+
+                            <th>Check Out</th>
+
+                            <th>Remarks</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.Employee?.Name
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+                                    @item.Employee?.EmployeeCode
+                                </td>
+
+
+                                <td>
+                                    @item.AttendanceDate.ToString("dd-MM-yyyy")
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.Status == "Present")
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Present
+                                        </span>
+                                    }
+                                    else if (item.Status == "Absent")
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-x-circle me-1"></i>
+                                            Absent
+                                        </span>
+                                    }
+                                    else if (item.Status == "Late")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-clock me-1"></i>
+                                            Late
+                                        </span>
+                                    }
+                                    else if (item.Status == "Half Day")
+                                    {
+                                        <span class="badge bg-info text-dark">
+                                            <i class="bi bi-hourglass-split me-1"></i>
+                                            Half Day
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.CheckIn.HasValue)
+                                    {
+                                        @item.CheckIn.Value.ToString(@"hh\:mm")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            Not checked in
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.CheckOut.HasValue)
+                                    {
+                                        @item.CheckOut.Value.ToString(@"hh\:mm")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            Not checked out
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+                                    @item.Remarks
+                                </td>
+
+
+                                <td class="text-nowrap">
+
+                                    @if (!item.CheckIn.HasValue)
+                                    {
+                                        <form asp-action="CheckIn"
+                                              asp-route-id="@item.AttendanceId"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-success btn-sm"
+                                                    title="Check In">
+
+                                                <i class="bi bi-box-arrow-in-right"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+
+                                    @if (item.CheckIn.HasValue &&
+                                         !item.CheckOut.HasValue)
+                                    {
+                                        <form asp-action="CheckOut"
+                                              asp-route-id="@item.AttendanceId"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-sm"
+                                                    title="Check Out">
+
+                                                <i class="bi bi-box-arrow-right"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.AttendanceId"
+                                       class="btn btn-warning btn-sm"
+                                       title="Edit">
+
+                                        <i class="bi bi-pencil-fill"></i>
+
+                                    </a>
+
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.AttendanceId"
+                                          method="post"
+                                          class="d-inline delete-form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                title="Delete">
+
+                                            <i class="bi bi-trash-fill"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#attendanceTable').DataTable({
+
+                responsive: true,
+
+                pageLength: 10,
+
+                lengthMenu: [10, 25, 50, 100],
+
+                ordering: true,
+
+                order: [[2, 'desc']],
+
+                language: {
+
+                    search: "🔍 Search Attendance:",
+
+                    lengthMenu: "Show _MENU_ Records",
+
+                    zeroRecords: "No Attendance Found",
+
+                    info: "Showing _START_ to _END_ of _TOTAL_ Records"
+
+                }
+
+            });
+
+
+            // SweetAlert Delete Confirmation
+
+            $('.delete-form').on('submit', function (e) {
+
+                e.preventDefault();
+
+                const form = this;
+
+                Swal.fire({
+
+                    title: 'Delete Attendance?',
+
+                    text: 'This attendance record will be permanently deleted.',
+
+                    icon: 'warning',
+
+                    showCancelButton: true,
+
+                    confirmButtonText: 'Yes, Delete',
+
+                    cancelButtonText: 'Cancel'
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        form.submit();
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+}

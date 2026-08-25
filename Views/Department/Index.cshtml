@@ -1,0 +1,122 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.Department>
+
+@{
+    Layout = "_AdminLayout";
+}
+@{
+    ViewData["Title"] = "Departments";
+}
+
+<div class="container mt-4">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    <div class="d-flex justify-content-between mb-3">
+
+        <h2>
+            Department List
+        </h2>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            + Add Department
+
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Department</th>
+
+                <th>Location</th>
+
+                <th width="280">Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.DepartmentId</td>
+
+                        <td>@item.DepartmentName</td>
+
+                        <td>@item.Location</td>
+
+                        <td>
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.DepartmentId"
+                               class="btn btn-info btn-sm">
+
+                                Details
+
+                            </a>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.DepartmentId"
+                               class="btn btn-warning btn-sm">
+
+                                Edit
+
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.DepartmentId"
+                               class="btn btn-danger btn-sm">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="4"
+                        class="text-center">
+
+                        No Department Found
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

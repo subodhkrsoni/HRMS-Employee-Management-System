@@ -1,0 +1,468 @@
+﻿@model EmployeeManagementSystem.Models.Payroll
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Payroll Details";
+}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-receipt me-2"></i>
+
+                Payroll Details
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Employee salary and payroll information.
+            </p>
+
+        </div>
+
+
+        <div class="d-flex gap-2">
+
+            <button type="button"
+                    onclick="window.print()"
+                    class="btn btn-dark">
+
+                <i class="bi bi-printer me-2"></i>
+
+                Print Payslip
+
+            </button>
+
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left me-2"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Salary Slip -->
+
+    <div class="card shadow-sm border-0"
+         id="payslip">
+
+        <!-- Company Header -->
+
+        <div class="card-header bg-dark text-white text-center py-4">
+
+            <h2 class="fw-bold mb-1">
+
+                <i class="bi bi-building me-2"></i>
+
+                HRMS
+
+            </h2>
+
+            <div>
+                Human Resource Management System
+            </div>
+
+            <hr />
+
+            <h4 class="mb-0">
+                PAYROLL / SALARY SLIP
+            </h4>
+
+        </div>
+
+
+        <div class="card-body p-4">
+
+
+            <!-- Employee Information -->
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-person-badge me-2"></i>
+
+                        Employee Information
+
+                    </h5>
+
+
+                    <table class="table table-borderless">
+
+                        <tr>
+
+                            <th width="40%">
+                                Employee
+                            </th>
+
+                            <td>
+                                @Model.Employee?.Name
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Employee Code
+                            </th>
+
+                            <td>
+                                @Model.Employee?.EmployeeCode
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <td>
+                                @Model.Employee?.Department?.DepartmentName
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Designation
+                            </th>
+
+                            <td>
+                                @Model.Employee?.Designation
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-calendar3 me-2"></i>
+
+                        Payroll Information
+
+                    </h5>
+
+
+                    <table class="table table-borderless">
+
+                        <tr>
+
+                            <th width="40%">
+                                Payroll Period
+                            </th>
+
+                            <td>
+                                @(new DateTime(
+                                    Model.PayrollYear,
+                                    Model.PayrollMonth,
+                                    1
+                                ).ToString("MMMM yyyy"))
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <td>
+
+                                @if (Model.PaymentStatus == "Paid")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Paid
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-hourglass-split me-1"></i>
+                                        Pending
+                                    </span>
+                                }
+
+                            </td>
+
+                        </tr>
+
+
+                        @if (Model.PaymentDate.HasValue)
+                        {
+                            <tr>
+
+                                <th>
+                                    Payment Date
+                                </th>
+
+                                <td>
+                                    @Model.PaymentDate.Value.ToString("dd-MM-yyyy")
+                                </td>
+
+                            </tr>
+                        }
+
+
+                        <tr>
+
+                            <th>
+                                Created Date
+                            </th>
+
+                            <td>
+                                @Model.CreatedDate.ToString("dd-MM-yyyy")
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <hr />
+
+
+            <!-- Earnings -->
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-plus-circle me-2"></i>
+
+                Earnings
+
+            </h5>
+
+
+            <table class="table table-bordered">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th class="text-end">
+                            Amount
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Basic Salary
+                        </td>
+
+                        <td class="text-end">
+                            ₹ @Model.BasicSalary.ToString("N2")
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Allowances
+                        </td>
+
+                        <td class="text-end text-success">
+
+                            + ₹ @Model.Allowances.ToString("N2")
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr class="fw-bold">
+
+                        <td>
+                            Gross Salary
+                        </td>
+
+                        <td class="text-end">
+
+                            ₹ @((Model.BasicSalary +
+                                                            Model.Allowances).ToString("N2"))
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <!-- Deductions -->
+
+            <h5 class="fw-bold mb-3 mt-4">
+
+                <i class="bi bi-dash-circle me-2"></i>
+
+                Deductions
+
+            </h5>
+
+
+            <table class="table table-bordered">
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Total Deductions
+                        </td>
+
+                        <td class="text-end text-danger">
+
+                            - ₹ @Model.Deductions.ToString("N2")
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <!-- Net Salary -->
+
+            <div class="alert alert-success mt-4">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+
+                        <h4 class="fw-bold mb-0">
+
+                            NET SALARY
+
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-6 text-end">
+
+                        <h3 class="fw-bold mb-0">
+
+                            ₹ @Model.NetSalary.ToString("N2")
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Remarks -->
+            @if (!string.IsNullOrWhiteSpace(Model.Remarks))
+            {
+                <div class="mt-4">
+
+                    <h5 class="fw-bold">
+                        Remarks
+                    </h5>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        @Model.Remarks
+
+                    </div>
+
+                </div>
+            }
+
+
+            <div class="text-center text-muted mt-5">
+
+                <small>
+                    This is a computer-generated salary slip.
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    @@media print {
+
+        body * {
+            visibility: hidden;
+        }
+
+        #payslip,
+        #payslip * {
+            visibility: visible;
+        }
+
+        #payslip {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .navbar,
+        aside,
+        .btn,
+        footer {
+            display: none !important;
+        }
+    }
+
+</style>

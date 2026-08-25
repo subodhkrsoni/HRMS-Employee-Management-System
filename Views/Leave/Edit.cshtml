@@ -1,0 +1,360 @@
+﻿@model EmployeeManagementSystem.Models.Leave
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Leave";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-pencil-square me-2"></i>
+                Edit Leave
+            </h2>
+
+            <p class="text-muted mb-0">
+                Update pending leave application
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+            Back to Leave List
+
+        </a>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-warning">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-pencil me-2"></i>
+
+                        Update Leave Application
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger">
+                    </div>
+
+                    <form asp-action="Edit"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               asp-for="LeaveId" />
+
+
+                        <!-- Employee -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="EmployeeId"
+                                   class="form-label fw-bold">
+
+                                Employee
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select asp-for="EmployeeId"
+                                    asp-items="ViewBag.Employees"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Employee --
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="EmployeeId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Leave Type -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="LeaveType"
+                                   class="form-label fw-bold">
+
+                                Leave Type
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select asp-for="LeaveType"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Leave Type --
+                                </option>
+
+                                <option value="Casual Leave">
+                                    Casual Leave
+                                </option>
+
+                                <option value="Sick Leave">
+                                    Sick Leave
+                                </option>
+
+                                <option value="Earned Leave">
+                                    Earned Leave
+                                </option>
+
+                                <option value="Unpaid Leave">
+                                    Unpaid Leave
+                                </option>
+
+                                <option value="Maternity Leave">
+                                    Maternity Leave
+                                </option>
+
+                                <option value="Paternity Leave">
+                                    Paternity Leave
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="LeaveType"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Dates -->
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="StartDate"
+                                       class="form-label fw-bold">
+
+                                    Start Date
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <input asp-for="StartDate"
+                                       type="date"
+                                       class="form-control"
+                                       id="startDate" />
+
+                                <span asp-validation-for="StartDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="EndDate"
+                                       class="form-label fw-bold">
+
+                                    End Date
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <input asp-for="EndDate"
+                                       type="date"
+                                       class="form-control"
+                                       id="endDate" />
+
+                                <span asp-validation-for="EndDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Reason -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="Reason"
+                                   class="form-label fw-bold">
+
+                                Reason
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <textarea asp-for="Reason"
+                                      class="form-control"
+                                      rows="4"
+                                      maxlength="500"></textarea>
+
+                            <span asp-validation-for="Reason"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Status -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-bold">
+                                Current Status
+                            </label>
+
+                            <div>
+
+                                <span class="badge bg-warning text-dark fs-6">
+
+                                    <i class="bi bi-hourglass-split me-1"></i>
+
+                                    Pending
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-save me-2"></i>
+
+                                Save Changes
+
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+
+                                <i class="bi bi-x-circle me-2"></i>
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Information -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-info-circle me-2"></i>
+
+                        Leave Status
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+                        This leave is currently:
+                    </p>
+
+                    <span class="badge bg-warning text-dark fs-6">
+                        Pending
+                    </span>
+
+                    <hr />
+
+                    <p class="text-muted mb-0">
+
+                        Only pending leave applications
+                        can be modified.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        $(document).ready(function () {
+
+            const today =
+                new Date().toISOString().split('T')[0];
+
+            $('#startDate').attr('min', today);
+
+            $('#endDate').attr('min', today);
+
+
+            $('#startDate').on('change', function () {
+
+                const startDate = $(this).val();
+
+                if (startDate) {
+
+                    $('#endDate').attr(
+                        'min',
+                        startDate
+                    );
+
+                }
+
+            });
+
+        });
+
+    </script>
+}

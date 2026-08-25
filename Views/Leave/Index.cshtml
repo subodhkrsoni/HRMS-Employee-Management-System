@@ -1,0 +1,764 @@
+﻿@model IEnumerable<EmployeeManagementSystem.Models.Leave>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Leave Management";
+
+    var leaves = Model.ToList();
+
+    var totalLeaves = leaves.Count;
+    var pendingLeaves = leaves.Count(x => x.Status == "Pending");
+    var approvedLeaves = leaves.Count(x => x.Status == "Approved");
+    var rejectedLeaves = leaves.Count(x => x.Status == "Rejected");
+}
+
+<div class="container-fluid">
+
+    <!-- ========================================== -->
+    <!-- ALERTS -->
+    <!-- ========================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- ========================================== -->
+    <!-- HEADER -->
+    <!-- ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-calendar-event me-2"></i>
+
+                Leave Management
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Manage employee leave applications and approvals.
+
+            </p>
+
+        </div>
+
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle me-2"></i>
+
+            Apply Leave
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- STATISTICS -->
+    <!-- ========================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- Total -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Total Leaves
+                            </h6>
+
+                            <h2 class="fw-bold">
+                                @totalLeaves
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-calendar3 fs-1 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pending -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Pending
+                            </h6>
+
+                            <h2 class="fw-bold text-warning">
+                                @pendingLeaves
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-hourglass-split fs-1 text-warning"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Approved -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Approved
+                            </h6>
+
+                            <h2 class="fw-bold text-success">
+                                @approvedLeaves
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-check-circle fs-1 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Rejected -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Rejected
+                            </h6>
+
+                            <h2 class="fw-bold text-danger">
+                                @rejectedLeaves
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-x-circle fs-1 text-danger"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- LEAVE TABLE -->
+    <!-- ========================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-list-check me-2"></i>
+
+                Leave Applications
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table id="leaveTable"
+                       class="table table-striped table-hover table-bordered align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Employee</th>
+
+                            <th>Leave Type</th>
+
+                            <th>Start Date</th>
+
+                            <th>End Date</th>
+
+                            <th>Days</th>
+
+                            <th>Reason</th>
+
+                            <th>Status</th>
+
+                            <th width="250">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @{
+                            int counter = 1;
+                        }
+
+                        @foreach (var item in leaves)
+                        {
+
+                            var totalDays =
+                                (item.EndDate.Date -
+                                 item.StartDate.Date).Days + 1;
+
+
+                            <tr>
+
+                                <!-- Number -->
+
+                                <td>
+                                    @counter
+                                </td>
+
+
+                                <!-- Employee -->
+
+                                <td>
+
+                                    <strong>
+                                        @item.Employee?.Name
+                                    </strong>
+
+                                    <br />
+
+                                    <small class="text-muted">
+
+                                        @item.Employee?.EmployeeCode
+
+                                    </small>
+
+                                </td>
+
+
+                                <!-- Leave Type -->
+
+                                <td>
+
+                                    <span class="badge bg-secondary">
+
+                                        @item.LeaveType
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Start Date -->
+
+                                <td>
+
+                                    @item.StartDate.ToString("dd-MM-yyyy")
+
+                                </td>
+
+
+                                <!-- End Date -->
+
+                                <td>
+
+                                    @item.EndDate.ToString("dd-MM-yyyy")
+
+                                </td>
+
+
+                                <!-- Days -->
+
+                                <td>
+
+                                    <span class="badge bg-info text-dark">
+
+                                        @totalDays day(s)
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Reason -->
+
+                                <td>
+
+                                    @if (!string.IsNullOrWhiteSpace(item.Reason))
+                                    {
+                                        <span title="@item.Reason">
+
+                                            @(item.Reason.Length > 35
+                                                ? item.Reason.Substring(0, 35) + "..."
+                                                : item.Reason)
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            No reason
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- Status -->
+
+                                <td>
+
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-hourglass-split me-1"></i>
+
+                                            Pending
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Approved")
+                                    {
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Approved
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Rejected")
+                                    {
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            Rejected
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+
+                                            @item.Status
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    @if (item.Status == "Pending")
+                                    {
+
+                                        <!-- Edit -->
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.LeaveId"
+                                           class="btn btn-warning btn-sm"
+                                           title="Edit">
+
+                                            <i class="bi bi-pencil"></i>
+
+                                        </a>
+
+
+                                        <!-- Approve -->
+
+                                        <button type="button"
+                                                class="btn btn-success btn-sm"
+                                                title="Approve"
+                                                onclick="approveLeave(@item.LeaveId)">
+
+                                            <i class="bi bi-check-lg"></i>
+
+                                        </button>
+
+
+                                        <!-- Reject -->
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm"
+                                                title="Reject"
+                                                onclick="rejectLeave(@item.LeaveId)">
+
+                                            <i class="bi bi-x-lg"></i>
+
+                                        </button>
+
+
+                                        <!-- Cancel -->
+
+                                        <button type="button"
+                                                class="btn btn-secondary btn-sm"
+                                                title="Cancel Leave"
+                                                onclick="deleteLeave(@item.LeaveId)">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+
+                                        <!-- Hidden Approve Form -->
+
+                                        <form id="approveForm-@item.LeaveId"
+                                              asp-action="Approve"
+                                              method="post"
+                                              class="d-none">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.LeaveId" />
+
+                                            <input type="hidden"
+                                                   name="comments"
+                                                   id="approveComments-@item.LeaveId" />
+
+                                        </form>
+
+
+                                        <!-- Hidden Reject Form -->
+
+                                        <form id="rejectForm-@item.LeaveId"
+                                              asp-action="Reject"
+                                              method="post"
+                                              class="d-none">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.LeaveId" />
+
+                                            <input type="hidden"
+                                                   name="comments"
+                                                   id="rejectComments-@item.LeaveId" />
+
+                                        </form>
+
+
+                                        <!-- Hidden Delete Form -->
+
+                                        <form id="deleteForm-@item.LeaveId"
+                                              asp-action="Delete"
+                                              method="post"
+                                              class="d-none">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.LeaveId" />
+
+                                        </form>
+
+                                    }
+                                    else
+                                    {
+
+                                        <span class="text-muted">
+
+                                            No actions
+
+                                        </span>
+
+                                    }
+
+                                </td>
+
+                            </tr>
+
+                            counter++;
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        // ==========================================
+        // DATATABLE
+        // ==========================================
+
+        $(document).ready(function () {
+
+            $('#leaveTable').DataTable({
+
+                responsive: true,
+
+                pageLength: 10,
+
+                lengthMenu: [10, 25, 50, 100],
+
+                ordering: true,
+
+                order: [[0, 'asc']]
+
+            });
+
+        });
+
+
+        // ==========================================
+        // APPROVE LEAVE
+        // ==========================================
+
+        function approveLeave(id) {
+
+            Swal.fire({
+
+                title: 'Approve Leave?',
+
+                text: 'You can add approval comments.',
+
+                icon: 'question',
+
+                input: 'textarea',
+
+                inputPlaceholder:
+                    'Enter approval comments (optional)...',
+
+                showCancelButton: true,
+
+                confirmButtonText:
+                    '<i class="bi bi-check-lg"></i> Approve',
+
+                cancelButtonText:
+                    'Cancel',
+
+                confirmButtonColor:
+                    '#198754',
+
+                inputValidator: () => {
+
+                    return null;
+
+                }
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    $('#approveComments-' + id)
+                        .val(result.value || '');
+
+                    $('#approveForm-' + id)
+                        .submit();
+
+                }
+
+            });
+
+        }
+
+
+        // ==========================================
+        // REJECT LEAVE
+        // ==========================================
+
+        function rejectLeave(id) {
+
+            Swal.fire({
+
+                title: 'Reject Leave?',
+
+                text: 'Please provide a reason for rejection.',
+
+                icon: 'warning',
+
+                input: 'textarea',
+
+                inputPlaceholder:
+                    'Enter rejection reason...',
+
+                showCancelButton: true,
+
+                confirmButtonText:
+                    '<i class="bi bi-x-lg"></i> Reject',
+
+                cancelButtonText:
+                    'Cancel',
+
+                confirmButtonColor:
+                    '#dc3545',
+
+                inputValidator: (value) => {
+
+                    if (!value ||
+                        value.trim() === '') {
+
+                        return 'Rejection reason is required.';
+
+                    }
+
+                }
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    $('#rejectComments-' + id)
+                        .val(result.value);
+
+                    $('#rejectForm-' + id)
+                        .submit();
+
+                }
+
+            });
+
+        }
+
+
+        // ==========================================
+        // CANCEL / DELETE LEAVE
+        // ==========================================
+
+        function deleteLeave(id) {
+
+            Swal.fire({
+
+                title: 'Cancel Leave?',
+
+                text:
+                    'This leave application will be cancelled.',
+
+                icon: 'warning',
+
+                showCancelButton: true,
+
+                confirmButtonText:
+                    'Yes, Cancel',
+
+                cancelButtonText:
+                    'No',
+
+                confirmButtonColor:
+                    '#dc3545'
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    $('#deleteForm-' + id)
+                        .submit();
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+}

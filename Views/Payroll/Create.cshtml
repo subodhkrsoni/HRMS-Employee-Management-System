@@ -1,0 +1,476 @@
+﻿@model EmployeeManagementSystem.Models.Payroll
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create Payroll";
+}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-cash-stack me-2"></i>
+                Create Payroll
+            </h2>
+
+            <p class="text-muted mb-0">
+                Create monthly payroll for an employee.
+            </p>
+
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+            Back to Payroll
+
+        </a>
+
+    </div>
+
+
+    <!-- Validation -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-file-earmark-plus me-2"></i>
+
+                        Payroll Details
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <form asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- Employee -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="EmployeeId"
+                                   class="form-label fw-bold">
+
+                                Employee
+
+                            </label>
+
+                            <select asp-for="EmployeeId"
+                                    asp-items="ViewBag.Employees"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Employee --
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="EmployeeId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <div class="row">
+
+
+                            <!-- Month -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PayrollMonth"
+                                       class="form-label fw-bold">
+
+                                    Payroll Month
+
+                                </label>
+
+                                <select asp-for="PayrollMonth"
+                                        class="form-select">
+
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+
+                                </select>
+
+                                <span asp-validation-for="PayrollMonth"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Year -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PayrollYear"
+                                       class="form-label fw-bold">
+
+                                    Payroll Year
+
+                                </label>
+
+                                <input asp-for="PayrollYear"
+                                       type="number"
+                                       class="form-control"
+                                       min="2000"
+                                       max="2100" />
+
+                                <span asp-validation-for="PayrollYear"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <!-- Basic Salary -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="BasicSalary"
+                                   class="form-label fw-bold">
+
+                                Basic Salary
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    ₹
+                                </span>
+
+                                <input asp-for="BasicSalary"
+                                       class="form-control salary-input"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       id="basicSalary" />
+
+                            </div>
+
+                            <span asp-validation-for="BasicSalary"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Allowances -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Allowances"
+                                   class="form-label fw-bold">
+
+                                Allowances
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    ₹
+                                </span>
+
+                                <input asp-for="Allowances"
+                                       class="form-control salary-input"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       id="allowances" />
+
+                            </div>
+
+                            <span asp-validation-for="Allowances"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Deductions -->
+
+                        <div class="mb-3">
+
+                            <label asp-for="Deductions"
+                                   class="form-label fw-bold">
+
+                                Deductions
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    ₹
+                                </span>
+
+                                <input asp-for="Deductions"
+                                       class="form-control salary-input"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       id="deductions" />
+
+                            </div>
+
+                            <span asp-validation-for="Deductions"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Net Salary -->
+
+                        <div class="alert alert-success">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <strong>
+
+                                    <i class="bi bi-wallet2 me-2"></i>
+
+                                    Net Salary
+
+                                </strong>
+
+                                <strong class="fs-4">
+
+                                    ₹ <span id="netSalary">
+                                    0.00
+                                </span>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Remarks -->
+
+                    <div class="mb-4">
+
+                        <label asp-for="Remarks"
+                               class="form-label fw-bold">
+
+                            Remarks
+
+                        </label>
+
+                        <textarea asp-for="Remarks"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Optional remarks...">
+                            </textarea>
+
+                        <span asp-validation-for="Remarks"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="d-flex gap-2">
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <i class="bi bi-save me-2"></i>
+
+                            Create Payroll
+
+                        </button>
+
+
+                        <a asp-action="Index"
+                           class="btn btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Salary Summary -->
+
+    <div class="col-lg-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-calculator me-2"></i>
+
+                    Salary Calculation
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <p class="text-muted">
+                    Net salary is calculated as:
+                </p>
+
+                <div class="text-center py-3">
+
+                    <h5>
+
+                        Basic Salary
+
+                    </h5>
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    <h5>
+
+                        Allowances
+
+                    </h5>
+
+                    <i class="bi bi-dash-lg"></i>
+
+                    <h5>
+
+                        Deductions
+
+                    </h5>
+
+                    <hr />
+
+                    <h4 class="text-success">
+
+                        Net Salary
+
+                    </h4>
+
+                </div>
+
+                <div class="alert alert-info mb-0">
+
+                    <i class="bi bi-info-circle me-2"></i>
+
+                    Payroll will initially be created with
+                    <strong>Pending</strong> status.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        function calculateNetSalary() {
+
+            let basic =
+                parseFloat($('#basicSalary').val()) || 0;
+
+            let allowances =
+                parseFloat($('#allowances').val()) || 0;
+
+            let deductions =
+                parseFloat($('#deductions').val()) || 0;
+
+            let net =
+                basic + allowances - deductions;
+
+            if (net < 0) {
+                net = 0;
+            }
+
+            $('#netSalary').text(
+                net.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+            );
+        }
+
+
+        $(document).ready(function () {
+
+            $('.salary-input').on(
+                'input',
+                calculateNetSalary
+            );
+
+            calculateNetSalary();
+
+        });
+
+    </script>
+}

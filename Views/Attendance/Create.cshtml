@@ -1,0 +1,278 @@
+﻿@model EmployeeManagementSystem.Models.Attendance
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-calendar-plus me-2"></i>
+                Mark Attendance
+            </h2>
+
+            <p class="text-muted mb-0">
+                Add employee attendance record.
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back
+
+        </a>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-dark text-white">
+
+            <i class="bi bi-calendar-check me-2"></i>
+            Attendance Information
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Employee -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="EmployeeId"
+                               class="form-label fw-bold">
+
+                            Employee
+
+                        </label>
+
+                        <select asp-for="EmployeeId"
+                                asp-items="ViewBag.Employees"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Employee --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="EmployeeId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Attendance Date -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="AttendanceDate"
+                               class="form-label fw-bold">
+
+                            Attendance Date
+
+                        </label>
+
+                        <input asp-for="AttendanceDate"
+                               type="date"
+                               class="form-control" />
+
+                        <span asp-validation-for="AttendanceDate"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Status -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Status"
+                               class="form-label fw-bold">
+
+                            Status
+
+                        </label>
+
+                        <select asp-for="Status"
+                                class="form-select"
+                                id="attendanceStatus">
+
+                            <option value="Present">
+                                Present
+                            </option>
+
+                            <option value="Absent">
+                                Absent
+                            </option>
+
+                            <option value="Late">
+                                Late
+                            </option>
+
+                            <option value="Half Day">
+                                Half Day
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Status"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Check In -->
+                    <div class="col-md-6 mb-3">
+
+                    <label asp-for="CheckIn"
+                      class="form-label fw-bold">
+                       Check In
+                     </label>
+
+                    <input asp-for="CheckIn"
+                       type="time"
+                  class="form-control attendance-time" />
+
+                  <span asp-validation-for="CheckIn"
+                   class="text-danger">
+                    </span>
+
+                    </div>
+
+                    <!-- Check Out -->
+                    <div class="col-md-6 mb-3">
+
+    <label asp-for="CheckOut"
+           class="form-label fw-bold">
+        Check Out
+    </label>
+
+    <input asp-for="CheckOut"
+           type="time"
+           class="form-control attendance-time" />
+
+    <span asp-validation-for="CheckOut"
+          class="text-danger">
+    </span>
+
+</div>
+
+                    <!-- Remarks -->
+                    <div class="col-md-12 mb-3">
+
+                        <label asp-for="Remarks"
+                               class="form-label fw-bold">
+
+                            Remarks
+
+                        </label>
+
+                        <textarea asp-for="Remarks"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Enter remarks if required...">
+                        </textarea>
+
+                        <span asp-validation-for="Remarks"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <hr />
+
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Mark Attendance
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        $(document).ready(function () {
+
+            function handleStatus() {
+
+                const status =
+                    $('#attendanceStatus').val();
+
+                if (status === 'Absent') {
+
+                    $('.attendance-time')
+                        .val('')
+                        .prop('disabled', true);
+
+                }
+                else {
+
+                    $('.attendance-time')
+                        .prop('disabled', false);
+
+                }
+
+            }
+
+            handleStatus();
+
+            $('#attendanceStatus')
+                .on('change', handleStatus);
+
+        });
+
+    </script>
+
+}

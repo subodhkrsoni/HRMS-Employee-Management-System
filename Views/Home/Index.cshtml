@@ -1,0 +1,1107 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+
+    // ==========================================
+    // EMPLOYEES
+    // ==========================================
+
+    var totalEmployees = (int)ViewBag.TotalEmployees;
+    var activeEmployees = (int)ViewBag.ActiveEmployees;
+    var totalDepartments = (int)ViewBag.TotalDepartments;
+
+
+    // ==========================================
+    // ATTENDANCE
+    // ==========================================
+
+    var presentToday = (int)ViewBag.PresentToday;
+    var absentToday = (int)ViewBag.AbsentToday;
+    var lateToday = (int)ViewBag.LateToday;
+    var halfDayToday = (int)ViewBag.HalfDayToday;
+
+    var attendancePercentage =
+        Convert.ToDouble(ViewBag.AttendancePercentage);
+
+
+    // ==========================================
+    // LEAVE
+    // ==========================================
+
+    var pendingLeaves = (int)ViewBag.PendingLeaves;
+    var approvedLeaves = (int)ViewBag.ApprovedLeaves;
+    var rejectedLeaves = (int)ViewBag.RejectedLeaves;
+
+
+    // ==========================================
+    // PAYROLL
+    // ==========================================
+
+    var pendingPayrollCount =
+        (int)ViewBag.PendingPayrollCount;
+
+    var paidPayrollCount =
+        (int)ViewBag.PaidPayrollCount;
+
+    var pendingPayrollAmount =
+        (decimal)ViewBag.PendingPayrollAmount;
+
+    var paidPayrollAmount =
+        (decimal)ViewBag.PaidPayrollAmount;
+
+    var totalPayrollAmount =
+        (decimal)ViewBag.TotalPayrollAmount;
+}
+
+
+<!-- ========================================== -->
+<!-- HEADER -->
+<!-- ========================================== -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-speedometer2 me-2"></i>
+
+            Dashboard
+
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            HRMS overview and current statistics.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- EMPLOYEE CARDS -->
+<!-- ========================================== -->
+
+<div class="row g-3 mb-4">
+
+    <!-- Total Employees -->
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+                            Total Employees
+                        </h6>
+
+                        <h2 class="fw-bold text-primary">
+                            @totalEmployees
+                        </h2>
+
+                    </div>
+
+                    <i class="bi bi-people-fill
+                              fs-1 text-primary"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Active Employees -->
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+                            Active Employees
+                        </h6>
+
+                        <h2 class="fw-bold text-success">
+                            @activeEmployees
+                        </h2>
+
+                    </div>
+
+                    <i class="bi bi-person-check-fill
+                              fs-1 text-success"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Departments -->
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+                            Departments
+                        </h6>
+
+                        <h2 class="fw-bold text-info">
+                            @totalDepartments
+                        </h2>
+
+                    </div>
+
+                    <i class="bi bi-diagram-3-fill
+                              fs-1 text-info"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- TODAY'S ATTENDANCE -->
+<!-- ========================================== -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-calendar-check me-2"></i>
+
+            Today's Attendance
+
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <!-- Present -->
+
+            <div class="col-md-2">
+
+                <div class="p-3 bg-success-subtle rounded">
+
+                    <small class="text-muted">
+                        Present
+                    </small>
+
+                    <h3 class="fw-bold text-success mb-0">
+                        @presentToday
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- Absent -->
+
+            <div class="col-md-2">
+
+                <div class="p-3 bg-danger-subtle rounded">
+
+                    <small class="text-muted">
+                        Absent
+                    </small>
+
+                    <h3 class="fw-bold text-danger mb-0">
+                        @absentToday
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- Late -->
+
+            <div class="col-md-2">
+
+                <div class="p-3 bg-warning-subtle rounded">
+
+                    <small class="text-muted">
+                        Late
+                    </small>
+
+                    <h3 class="fw-bold text-warning mb-0">
+                        @lateToday
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- Half Day -->
+
+            <div class="col-md-2">
+
+                <div class="p-3 bg-info-subtle rounded">
+
+                    <small class="text-muted">
+                        Half Day
+                    </small>
+
+                    <h3 class="fw-bold text-info mb-0">
+                        @halfDayToday
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- Attendance Percentage -->
+
+            <div class="col-md-4">
+
+                <div class="p-3 bg-primary-subtle rounded">
+
+                    <small class="text-muted">
+                        Attendance Percentage
+                    </small>
+
+                    <h3 class="fw-bold text-primary mb-0">
+
+                        @attendancePercentage.ToString("0.00")%
+
+                    </h3>
+
+                    <small class="text-muted">
+
+                        Present + Late = 1
+                        <br />
+                        Half Day = 0.5
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- LEAVE + PAYROLL CHARTS -->
+<!-- ========================================== -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- Leave Chart -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-calendar-event me-2"></i>
+
+                    Leave Summary
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <canvas id="leaveChart"
+                        height="220"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Payroll Chart -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-cash-stack me-2"></i>
+
+                    Payroll Summary
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <canvas id="payrollChart"
+                        height="220"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- PAYROLL + LEAVE SUMMARY -->
+<!-- ========================================== -->
+
+<div class="row g-3 mb-4">
+
+
+    <!-- Total Payroll -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Payroll
+                </h6>
+
+                <h3 class="fw-bold text-primary">
+
+                    ₹ @totalPayrollAmount.ToString("N2")
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pending Payroll -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Pending Payroll
+                </h6>
+
+                <h3 class="fw-bold text-warning">
+
+                    @pendingPayrollCount
+
+                </h3>
+
+                <small>
+
+                    ₹ @pendingPayrollAmount.ToString("N2")
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Paid Payroll -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Paid Payroll
+                </h6>
+
+                <h3 class="fw-bold text-success">
+
+                    @paidPayrollCount
+
+                </h3>
+
+                <small>
+
+                    ₹ @paidPayrollAmount.ToString("N2")
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pending Leaves -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Pending Leaves
+                </h6>
+
+                <h3 class="fw-bold text-warning">
+
+                    @pendingLeaves
+
+                </h3>
+
+                <a asp-controller="Leave"
+                   asp-action="Index"
+                   class="btn btn-sm btn-outline-primary">
+
+                    <i class="bi bi-eye me-1"></i>
+
+                    View Leaves
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- RECENT ATTENDANCE -->
+<!-- ========================================== -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-clock-history me-2"></i>
+
+            Recent Attendance
+
+        </h5>
+
+    </div>
+
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Employee</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (ViewBag.RecentAttendance != null &&
+                         ViewBag.RecentAttendance.Count > 0)
+                    {
+                        foreach (var item in ViewBag.RecentAttendance)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.Employee?.Name
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    @item.AttendanceDate.ToString("dd-MM-yyyy")
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.Status == "Present")
+                                    {
+                                        <span class="badge bg-success">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Present
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Absent")
+                                    {
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            Absent
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Late")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+
+                                            <i class="bi bi-clock me-1"></i>
+
+                                            Late
+
+                                        </span>
+                                    }
+                                    else if (item.Status == "Half Day")
+                                    {
+                                        <span class="badge bg-info">
+
+                                            <i class="bi bi-hourglass-split me-1"></i>
+
+                                            Half Day
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+
+                                            @item.Status
+
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="3"
+                                class="text-center text-muted py-4">
+
+                                No attendance records found.
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- RECENT LEAVES + PAYROLL -->
+<!-- ========================================== -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- Recent Leaves -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-calendar-event me-2"></i>
+
+                    Recent Leaves
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Employee</th>
+
+                                <th>Days</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @if (ViewBag.RecentLeaves != null &&
+                                 ViewBag.RecentLeaves.Count > 0)
+                            {
+                                foreach (var item in ViewBag.RecentLeaves)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @item.Employee?.Name
+                                        </td>
+
+                                        <td>
+    @{
+        var totalDays =
+            (item.EndDate.Date - item.StartDate.Date).Days + 1;
+    }
+
+    @totalDays
+    @(totalDays == 1 ? "Day" : "Days")
+</td>
+
+                                        <td>
+
+                                            @if (item.Status == "Approved")
+                                            {
+                                                <span class="badge bg-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                            else if (item.Status == "Rejected")
+                                            {
+                                                <span class="badge bg-danger">
+                                                    Rejected
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark">
+                                                    @item.Status
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+
+                                    <td colspan="3"
+                                        class="text-center text-muted py-4">
+
+                                        No leave records found.
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Recent Payroll -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-cash-stack me-2"></i>
+
+                    Recent Payroll
+
+                </h5>
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Employee</th>
+
+                                <th>Net Salary</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @if (ViewBag.RecentPayroll != null &&
+                                 ViewBag.RecentPayroll.Count > 0)
+                            {
+                                foreach (var item in ViewBag.RecentPayroll)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @item.Employee?.Name
+                                        </td>
+
+                                        <td>
+
+                                            <strong>
+
+                                                ₹ @item.NetSalary.ToString("N2")
+
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+
+                                            @if (item.PaymentStatus == "Paid")
+                                            {
+                                                <span class="badge bg-success">
+
+                                                    <i class="bi bi-check-circle me-1"></i>
+
+                                                    Paid
+
+                                                </span>
+                                            }
+                                            else if (item.PaymentStatus == "Pending")
+                                            {
+                                                <span class="badge bg-warning text-dark">
+
+                                                    <i class="bi bi-hourglass-split me-1"></i>
+
+                                                    Pending
+
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">
+
+                                                    @item.PaymentStatus
+
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+
+                                    <td colspan="3"
+                                        class="text-center text-muted py-4">
+
+                                        No payroll records found.
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- QUICK ACTIONS -->
+<!-- ========================================== -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-lightning-fill me-2"></i>
+
+            Quick Actions
+
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <!-- Add Employee -->
+
+        <a asp-controller="Employee"
+           asp-action="Create"
+           class="btn btn-primary me-2 mb-2">
+
+            <i class="bi bi-person-plus me-1"></i>
+
+            Add Employee
+
+        </a>
+
+
+        <!-- Attendance -->
+
+        <a asp-controller="Attendance"
+           asp-action="Create"
+           class="btn btn-success me-2 mb-2">
+
+            <i class="bi bi-calendar-check me-1"></i>
+
+            Mark Attendance
+
+        </a>
+
+
+        <!-- Leave -->
+
+        <a asp-controller="Leave"
+           asp-action="Create"
+           class="btn btn-warning me-2 mb-2">
+
+            <i class="bi bi-calendar-plus me-1"></i>
+
+            Apply Leave
+
+        </a>
+
+
+        <!-- Payroll -->
+
+        <a asp-controller="Payroll"
+           asp-action="Create"
+           class="btn btn-info mb-2">
+
+            <i class="bi bi-cash-stack me-1"></i>
+
+            Create Payroll
+
+        </a>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        // ==========================================
+        // LEAVE CHART
+        // ==========================================
+
+        const leaveCanvas =
+            document.getElementById('leaveChart');
+
+        if (leaveCanvas) {
+
+            new Chart(
+                leaveCanvas,
+                {
+                    type: 'doughnut',
+
+                    data: {
+
+                        labels: [
+                            'Pending',
+                            'Approved',
+                            'Rejected'
+                        ],
+
+                        datasets: [{
+                            data: [
+                                @pendingLeaves,
+                                @approvedLeaves,
+                                @rejectedLeaves
+                            ]
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // PAYROLL CHART
+        // ==========================================
+
+        const payrollCanvas =
+            document.getElementById('payrollChart');
+
+        if (payrollCanvas) {
+
+            new Chart(
+                payrollCanvas,
+                {
+                    type: 'bar',
+
+                    data: {
+
+                        labels: [
+                            'Pending',
+                            'Paid'
+                        ],
+
+                        datasets: [{
+
+                            label: 'Payroll Amount',
+
+                            data: [
+                                @pendingPayrollAmount,
+                                @paidPayrollAmount
+                            ]
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero: true
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    </script>
+
+}

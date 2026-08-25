@@ -1,0 +1,65 @@
+﻿@model EmployeeManagementSystem.Models.Department
+
+@{
+    ViewData["Title"] = "Delete Department";
+}
+
+<div class="container mt-4">
+
+    <div class="alert alert-danger">
+
+        <h3>Delete Department</h3>
+
+        <hr />
+
+        <dl class="row">
+
+            <dt class="col-sm-3">
+
+                Department
+
+            </dt>
+
+            <dd class="col-sm-9">
+
+                @Model.DepartmentName
+
+            </dd>
+
+            <dt class="col-sm-3">
+
+                Location
+
+            </dt>
+
+            <dd class="col-sm-9">
+
+                @Model.Location
+
+            </dd>
+
+        </dl>
+
+        <form asp-action="Delete">
+
+            <input type="hidden"
+                   asp-for="DepartmentId" />
+
+            <button class="btn btn-danger">
+
+                Delete
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
